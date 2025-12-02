@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import Link from 'next/link'
 import { ListingWithUser } from '@/types'
 
@@ -10,7 +10,7 @@ export default function ListingsPage() {
   const [search, setSearch] = useState('')
   const [location, setLocation] = useState('')
 
-  async function fetchListings() {
+  const fetchListings = useCallback(async () => {
     try {
       const params = new URLSearchParams()
       if (search) params.append('search', search)
@@ -24,11 +24,11 @@ export default function ListingsPage() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [search, location])
 
   useEffect(() => {
     fetchListings()
-  }, [search, location])
+  }, [fetchListings])
 
   return (
     <div className="min-h-screen bg-gray-50">

@@ -9,7 +9,7 @@ export default function HomePage() {
             Turn Your Unused Gym Membership Into Cash
           </h1>
           <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
-            Stop wasting money on gym memberships you don't use. Sell them to people who want to save money on gym access.
+            Stop wasting money on gym memberships you don&apos;t use. Sell them to people who want to save money on gym access.
           </p>
 
           <div className="flex gap-4 justify-center mb-16">
@@ -34,7 +34,7 @@ export default function HomePage() {
                 Recover Your Money
               </h3>
               <p className="text-gray-600">
-                Get back what you paid for that membership you're not using
+                Get back what you paid for that membership you&apos;re not using
               </p>
             </div>
 
