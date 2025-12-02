@@ -1,0 +1,76 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  listings    Listing[]
+  purchases   Transaction[] @relation("buyer")
+  sales       Transaction[] @relation("seller")
+}
+
+model Listing {
+  id             String   @id @default(cuid())
+  userId         String
+  gymName        String
+  membershipType String
+  monthlyPrice   Float
+  monthsRemaining Int
+  totalPrice     Float
+  description    String
+  location       String
+  status         ListingStatus @default(ACTIVE)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  transactions Transaction[]
+
+  @@index([status])
+  @@index([gymName])
+  @@index([location])
+}
+
+enum ListingStatus {
+  ACTIVE
+  PENDING
+  SOLD
+}
+
+model Transaction {
+  id                   String   @id @default(cuid())
+  listingId            String
+  buyerId              String
+  sellerId             String
+  amount               Float
+  stripePaymentIntentId String?
+  status               TransactionStatus @default(PENDING)
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+
+  listing  Listing @relation(fields: [listingId], references: [id])
+  buyer    User    @relation("buyer", fields: [buyerId], references: [id])
+  seller   User    @relation("seller", fields: [sellerId], references: [id])
+
+  @@index([buyerId])
+  @@index([sellerId])
+  @@index([listingId])
+}
+
+enum TransactionStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
